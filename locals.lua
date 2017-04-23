@@ -83,23 +83,26 @@ f()
 assert(c.a == 3)
 
 -- old test for limits for special instructions (now just a generic test)
-do
-  local i = 2
-  local p = 4    -- p == 2^i
-  repeat
-    for j=-3,3 do
-      assert(load(string.format([[local a=%s;
-                                        a=a+%s;
-                                        assert(a ==2^%s)]], j, p-j, i), '')) ()
-      assert(load(string.format([[local a=%s;
-                                        a=a-%s;
-                                        assert(a==-2^%s)]], -j, p-j, i), '')) ()
-      assert(load(string.format([[local a,b=0,%s;
-                                        a=b-%s;
-                                        assert(a==-2^%s)]], -j, p-j, i), '')) ()
-    end
-    p = 2 * p;  i = i + 1
-  until p <= 0
+-- TODO: when limit stuff is ok
+if not _soft then
+  do
+    local i = 2
+    local p = 4    -- p == 2^i
+    repeat
+      for j=-3,3 do
+        assert(load(string.format([[local a=%s;
+                                          a=a+%s;
+                                          assert(a ==2^%s)]], j, p-j, i), '')) ()
+        assert(load(string.format([[local a=%s;
+                                          a=a-%s;
+                                          assert(a==-2^%s)]], -j, p-j, i), '')) ()
+        assert(load(string.format([[local a,b=0,%s;
+                                          a=b-%s;
+                                          assert(a==-2^%s)]], -j, p-j, i), '')) ()
+      end
+      p = 2 * p;  i = i + 1
+    until p <= 0
+  end
 end
 
 print'+'
